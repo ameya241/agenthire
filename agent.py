@@ -1,7 +1,7 @@
 from transformers import pipeline
 
 generator = pipeline(
-    task="text-generation",
+    "text-generation",
     model="google/flan-t5-small"
 )
 
@@ -22,5 +22,5 @@ Job Description:
 {jd}
 """
 
-    result = generator(prompt, max_length=256)
+    result = generator(prompt, max_length=200)
     return result[0]["generated_text"]
