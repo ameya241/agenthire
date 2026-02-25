@@ -9,8 +9,8 @@ jd = st.text_area("Paste Job Description Here")
 if st.button("Analyze"):
 
     if resume and jd:
-        score = get_similarity_score(resume, jd)
-        st.subheader(f"Match Score: {score}%")
+        result = analyze_with_agent(resume, jd)
+        st.write(result)
 
         with st.spinner("Agent analyzing..."):
             result = analyze_with_agent(resume, jd)
