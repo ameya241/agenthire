@@ -7,15 +7,27 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
 def analyze_with_agent(resume, jd):
-
     prompt = f"""
-Compare the resume and job description.
+You are a hiring intelligence agent.
 
-Give:
-1. Matching skills
-2. Missing skills
-3. Improvement suggestions
-4. Rewrite 2 tailored resume bullet points.
+Analyze the resume against the job description.
+
+Follow this exact structure:
+
+1. MATCHING SKILLS:
+- Bullet points
+
+2. MISSING SKILLS:
+- Bullet points
+
+3. EXPERIENCE ALIGNMENT:
+- Short paragraph
+
+4. IMPROVEMENT SUGGESTIONS:
+- Bullet points
+
+5. REWRITTEN RESUME BULLET:
+- Rewrite one bullet tailored to the JD
 
 Resume:
 {resume}
@@ -23,12 +35,5 @@ Resume:
 Job Description:
 {jd}
 """
-
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True)
-
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=200
-    )
-
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    response = llm.invoke(prompt)
+    return response

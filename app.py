@@ -26,17 +26,13 @@ if st.button("Analyze"):
 
     if resume and jd:
 
-        # 🔹 Calculate Score
         score = get_similarity_score(resume, jd)
+        st.metric("Match Score (%)", score)
 
-        st.subheader("📊 Match Score")
-        st.success(f"{score}% Match with Job Description")
-
-        # 🔹 Run AI Analysis (only once)
-        with st.spinner("🤖 Agent analyzing..."):
+        with st.spinner("Agent analyzing..."):
             result = analyze_with_agent(resume, jd)
 
-        st.subheader("🧠 Agent Analysis")
+        st.subheader("Agentic Analysis")
         st.write(result)
 
     else:
