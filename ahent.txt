@@ -1,0 +1,54 @@
+import ollama
+
+def analyze_with_agent(resume, jd):
+
+    # limit input size (small models break with long context)
+    resume = resume[:1500]
+    jd = jd[:1500]
+
+    prompt = f"""
+You are a strict ATS recruiter AI.
+
+TASK:
+Compare Resume and Job Description.
+
+INSTRUCTIONS:
+- Be concise.
+- Use bullet points only.
+- No paragraphs.
+- No explanations.
+- Follow format exactly.
+
+FORMAT:
+
+MATCHING SKILLS:
+- ...
+
+MISSING SKILLS:
+- ...
+
+IMPROVEMENT SUGGESTIONS:
+- ...
+
+REWRITTEN BULLETS:
+- ...
+- ...
+
+RESUME:
+{resume}
+
+JOB DESCRIPTION:
+{jd}
+"""
+
+    response = ollama.chat(
+        model="qwen:1.8b",
+        messages=[{"role": "user", "content": prompt}],
+        options={
+            "temperature": 0.2,
+            "num_predict": 350,
+            "top_p": 0.8
+        }
+    )
+
+    return response["message"]["content"]
