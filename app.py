@@ -1,5 +1,4 @@
 import streamlit as st
-from rag_pipeline import get_similarity_score
 from agent import analyze_with_agent
 
 st.title("🚀 AgentHire - Resume Intelligence System")
