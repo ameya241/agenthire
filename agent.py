@@ -1,6 +1,6 @@
 from transformers import pipeline
 
-generator = pipeline("text-generation", model="google/flan-t5-small")
+generator = pipeline("text2text-generation", model="google/flan-t5-small")
 
 def analyze_with_agent(resume, jd):
 
