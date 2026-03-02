@@ -1,39 +1,40 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-import torch
-
-model_name = "google/flan-t5-small"
-
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+import ollama
 
 def analyze_with_agent(resume, jd):
+
+    resume = resume[:1500]
+    jd = jd[:1500]
+
     prompt = f"""
-You are a hiring intelligence agent.
+You are a strict ATS recruiter AI.
 
-Analyze the resume against the job description.
+MATCHING SKILLS:
+- ...
 
-Follow this exact structure:
+MISSING SKILLS:
+- ...
 
-1. MATCHING SKILLS:
-- Bullet points
+IMPROVEMENT SUGGESTIONS:
+- ...
 
-2. MISSING SKILLS:
-- Bullet points
+REWRITTEN BULLETS:
+- ...
+- ...
 
-3. EXPERIENCE ALIGNMENT:
-- Short paragraph
-
-4. IMPROVEMENT SUGGESTIONS:
-- Bullet points
-
-5. REWRITTEN RESUME BULLET:
-- Rewrite one bullet tailored to the JD
-
-Resume:
+RESUME:
 {resume}
 
-Job Description:
+JOB DESCRIPTION:
 {jd}
 """
-    response = llm.invoke(prompt)
-    return response
+
+    response = ollama.chat(
+        model="qwen:1.8b",
+        messages=[{"role": "user", "content": prompt}],
+        options={
+            "temperature": 0.2,
+            "num_predict": 350
+        }
+    )
+
+    return response["message"]["content"]
