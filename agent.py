@@ -1,9 +1,15 @@
 from transformers import pipeline
+import streamlit as st
 
-generator = pipeline(
-    "text2text-generation",
-    model="google/flan-t5-base"
-)
+@st.cache_resource
+def load_model():
+    return pipeline(
+        "text-generation",
+        model="google/flan-t5-base",
+        max_new_tokens=300
+    )
+
+generator = load_model()
 
 def analyze_with_agent(resume, jd):
 
@@ -28,8 +34,8 @@ Job Description:
 
     result = generator(
         prompt,
-        max_length=400,
-        temperature=0.3
+        temperature=0.3,
+        do_sample=False
     )
 
     return result[0]["generated_text"]
