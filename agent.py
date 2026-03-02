@@ -1,40 +1,35 @@
-import ollama
+from transformers import pipeline
+
+generator = pipeline(
+    "text2text-generation",
+    model="google/flan-t5-base"
+)
 
 def analyze_with_agent(resume, jd):
 
-    resume = resume[:1500]
-    jd = jd[:1500]
+    resume = resume[:1000]
+    jd = jd[:1000]
 
     prompt = f"""
-You are a strict ATS recruiter AI.
+Compare the Resume and Job Description.
 
-MATCHING SKILLS:
-- ...
+Return:
+- Matching Skills
+- Missing Skills
+- 2 Improvement Suggestions
+- Rewrite 2 Resume Bullets
 
-MISSING SKILLS:
-- ...
-
-IMPROVEMENT SUGGESTIONS:
-- ...
-
-REWRITTEN BULLETS:
-- ...
-- ...
-
-RESUME:
+Resume:
 {resume}
 
-JOB DESCRIPTION:
+Job Description:
 {jd}
 """
 
-    response = ollama.chat(
-        model="qwen:1.8b",
-        messages=[{"role": "user", "content": prompt}],
-        options={
-            "temperature": 0.2,
-            "num_predict": 350
-        }
+    result = generator(
+        prompt,
+        max_length=400,
+        temperature=0.3
     )
 
-    return response["message"]["content"]
+    return result[0]["generated_text"]
